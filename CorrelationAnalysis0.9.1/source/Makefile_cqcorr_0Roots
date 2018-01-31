@@ -1,0 +1,46 @@
+#use nr2 header and library to compile examples
+#
+# invoke this makefile with something like
+#     make TARGET=xlflmoon
+#
+# or use a script like makeit:
+### 
+### #!/bin/sh
+### # invoke makefile with target
+### if [ $# == 0 ]
+### then
+###     echo "You must supply a target name for the Makefile"
+###     exit
+### else
+### target=$1
+### shift 1
+### echo "make TARGET=$target $*"
+### make TARGET=$target $*
+### fi
+#
+# then just
+#     makeit xludcmp
+#
+CC                 = gcc
+CFLAGS             = -Wall -W
+INSTALL_INCLUDEDIR = /usr/include/nr
+INSTALL_LIBDIR     = /usr/lib/nr
+INSTALL_LIB        = nr2c
+
+INCLUDEDIR = $(INSTALL_INCLUDEDIR)
+INCLUDES   = -I$(INSTALL_INCLUDEDIR)
+LIBDIR     = -L$(INSTALL_LIBDIR)
+
+LIBS       = -l$(INSTALL_LIB) -lm
+
+TARGET = cqcorr_0Roots
+OBJS   = $(TARGET).o
+
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) $(LIBDIR) $(LIBS) -o $(TARGET)
+
+.c.o:
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+clean:
+	rm -f $(OBJS) $(TARGET)
